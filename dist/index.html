@@ -113,7 +113,7 @@
     </ul>
 
     <script>
-      navigator.serviceWorker.register("./worker.js", { scope: "/" });
+      navigator.serviceWorker.register("./worker.js", { scope: "./" });
 
       function sendToWorker(data) {
         return navigator.serviceWorker.ready.then(function(reg) {
