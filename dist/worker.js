@@ -285,7 +285,11 @@
       // Add our dummy image to the offline cache. It is then picked up by
       // the fetch event in worker.js
       let cache = yield caches.open("demo-cache");
-      yield cache.add("./dummy-image.png");
+      yield cache.add("./dummy-image.png"); // add our other page assets too
+
+      yield cache.add("./index.html");
+      yield cache.add("./canvas.html");
+      yield cache.add("./canvas-client.js");
       self.skipWaiting();
     })());
   });

@@ -7,6 +7,10 @@ self.addEventListener("install", function(e) {
       // the fetch event in worker.js
       let cache = await caches.open("demo-cache");
       await cache.add("./dummy-image.png");
+      // add our other page assets too
+      await cache.add("./index.html");
+      await cache.add("./canvas.html");
+      await cache.add("./canvas-client.js");
       self.skipWaiting();
     })()
   );
