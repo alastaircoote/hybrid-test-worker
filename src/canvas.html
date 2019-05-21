@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Canvas demo</title>
+    <meta name="theme-color" content="#db5945" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+
+      button {
+        border: none;
+        background: #000;
+        color: #fff;
+        display: block;
+        width: 90%;
+        margin: 10px auto;
+        text-decoration: none;
+        font-size: 14px;
+        padding: 10px 0px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Canvas demo</h1>
+    <p>
+      This demo uses the exact same code that runs in the worker in iOS to
+      render a canvas inside a notification.
+    </p>
+    <canvas style="width: 95vw; height: 95vw" id="demo-canvas"></canvas>
+    <button id="add-circle">Add circle</button>
+    <script src="canvas-client.js"></script>
+  </body>
+</html>
