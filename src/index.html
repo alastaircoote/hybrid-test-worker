@@ -7,6 +7,8 @@
     <style>
       body {
         font-family: sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
       }
       ul {
         list-style: none;
@@ -37,6 +39,12 @@
         font-size: 11px;
         margin-bottom: 10px;
       }
+
+      aside {
+        display: block;
+        font-size: 11px;
+        text-align: center;
+      }
     </style>
   </head>
   <body>
@@ -50,6 +58,9 @@
           HTML responses offline:
         </p>
         <a class="button" href="offline-page.html">Offline page</a>
+        <aside>
+            <a href="https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/fetch-offline-response.js">Source code</a>
+          </aside>
       </li>
 
       <li>
@@ -61,6 +72,9 @@
           read more, or dismiss whenever they're done.
         </p>
         <button id="send-notify">Show threaded notification</button>
+        <aside>
+          <a href="https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/threaded-notification.js">Source code</a>
+        </aside>
       </li>
       <li>
         <h3>Canvas in notification</h3>
@@ -71,11 +85,19 @@
           animation paired with an action button to add more elements:
         </p>
         <button id="send-canvas">Show canvas notification</button>
+        <aside>
+            <a href="https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/canvas-notification.js">Source code</a> |
+            <a href="https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/canvas-shared.js">Shared source code</a>
+          </aside>
         <p>
-          To demostrate code portability, the exact same code is used on a
+          To demonstrate code portability, the exact same code is used on a
           normal web page here:
         </p>
         <a class="button" href="canvas.html">Render canvas in HTML</a>
+        <aside>
+            <a href="https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/canvas-client.js">Source code</a> |
+            <a href="https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/canvas-shared.js">Shared source code</a>
+          </aside>
       </li>
       <li>
         <h3>Live video</h3>
@@ -91,6 +113,9 @@
           above) on top of a video, for mute/unmute display, text overlay, etc.
         </p>
         <button id="live-video">Show live video notification</button>
+        <aside>
+            <a href="https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/live-video-notification.js">Source code</a>
+          </aside>
       </li>
       <li>
         <h3>Text replies</h3>
@@ -105,6 +130,9 @@
           for the web that has not yet been implemented in any browsers.
         </p>
         <button id="text-reply">Show text reply notification</button>
+        <aside>
+            <a href="https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/text-reply-notification.js">Source code</a>
+          </aside>
         <p>Normally you would use fetch() to send these responses off somewhere, but for the sake
           of a simple demo, we are storing them in local storage. View them here:</p>
         </p>
