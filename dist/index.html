@@ -1,1 +1,197 @@
-<!doctypehtml><title>Worker examples</title><meta content=#db5945 name=theme-color><meta content="width=device-width,initial-scale=1"name=viewport><style>body{font-family:sans-serif;max-width:600px;margin:0 auto}ul{list-style:none;margin:0;padding:0}li a.button,li button{border:none;background:#000;color:#fff;display:block;width:90%;margin:10px auto;text-decoration:none;font-size:14px;padding:10px 0;text-align:center}h3{margin-bottom:0}h6{margin:0;font-size:11px;margin-bottom:10px}aside{display:block;font-size:11px;text-align:center}</style><h1>Worker demos</h1><ul><li><h3>Offline rendering</h3><p>Available on the web at:<p><a href=https://alastaircoote.github.io/hybrid-test-worker/dist/ >https://alastaircoote.github.io/hybrid-test-worker/dist/</a><h6>Web and iOS</h6><p>By dispatching a fetch event into the worker, we can construct custom HTML responses offline:</p><a href=offline-page.html class=button>Offline page</a><aside><a href=https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/fetch-offline-response.js>Source code</a></aside><li><h3>Threaded notification</h3><h6>Web and iOS</h6><p>We can use a combination of notification tags and action buttons to "thread" a notification - giving the user the opportunity to tap to read more, or dismiss whenever they're done.</p><button id=send-notify>Show threaded notification</button><aside><a href=https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/threaded-notification.js>Source code</a></aside><li><h3>Canvas in notification</h3><h6>iOS only (HTML demo works on web)</h6><p>In iOS we can map the HTML Canvas API directly to CoreGraphics, allowing us to draw and animate graphics. To see a basic example animation paired with an action button to add more elements:</p><button id=send-canvas>Show canvas notification</button><aside><a href=https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/canvas-notification.js>Source code</a> | <a href=https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/canvas-shared.js>Shared source code</a></aside><p>To demonstrate code portability, the exact same code is used on a normal web page here:</p><a href=canvas.html class=button>Render canvas in HTML</a><aside><a href=https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/canvas-client.js>Source code</a> | <a href=https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/canvas-shared.js>Shared source code</a></aside><li><h3>Live video</h3><h6>iOS only</h6><p>It is possible to put an HLS live video feed inside an iOS notification. We can also switch between feeds via an action button. This doesn't require any special API, just use of the same 'tag' field the threaded notifications demo uses.<p>It isn't demonstrated here, but we can also put a canvas overlay (see above) on top of a video, for mute/unmute display, text overlay, etc.</p><button id=live-video>Show live video notification</button><aside><a href=https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/live-video-notification.js>Source code</a></aside><li><h3>Text replies</h3><h6>iOS only (proposed web standard)</h6><p>It possible to use a special action button to giving users the chance to send a text response directly from a notification, much like how text message apps work. This implementation is based on a <a href=https://github.com/anitawoodruff/inline-notification-replies>proposed API</a> for the web that has not yet been implemented in any browsers.</p><button id=text-reply>Show text reply notification</button><aside><a href=https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/text-reply-notification.js>Source code</a></aside><p>Normally you would use fetch() to send these responses off somewhere, but for the sake of a simple demo, we are storing them in local storage. View them here:</p><a href=replies.html class=button>See the replies I've sent</a></ul><script>function sendToWorker(n){return navigator.serviceWorker.ready.then(function(e){e.active.postMessage(JSON.stringify(n),[])})}function requestNotificationPermissionsAndSend(n){return Notification.requestPermission().then(function(e){if("granted"!==e)throw alert("You didn't grant permission"),new Error("no permission");return sendToWorker(n)})}navigator.serviceWorker.register("./worker.js",{scope:"./"}),document.getElementById("send-notify").addEventListener("click",function(){requestNotificationPermissionsAndSend({action:"threaded-notification"})}),document.getElementById("send-canvas").addEventListener("click",function(){requestNotificationPermissionsAndSend({action:"canvas-notification"})}),document.getElementById("live-video").addEventListener("click",function(){requestNotificationPermissionsAndSend({action:"live-video-notification"})}),document.getElementById("text-reply").addEventListener("click",function(){requestNotificationPermissionsAndSend({action:"text-reply-notification"})})</script>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Worker examples</title>
+    <meta name="theme-color" content="#db5945" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      li a.button,
+      li button {
+        border: none;
+        background: #000;
+        color: #fff;
+        display: block;
+        width: 90%;
+        margin: 10px auto;
+        text-decoration: none;
+        font-size: 14px;
+        padding: 10px 0px;
+        text-align: center;
+      }
+
+      h3 {
+        margin-bottom: 0;
+      }
+
+      h6 {
+        margin: 0;
+        font-size: 11px;
+        margin-bottom: 10px;
+      }
+
+      aside {
+        display: block;
+        font-size: 11px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Worker demos</h1>
+    <ul>
+      <li>
+        <h3>Offline rendering</h3>
+        <p>Available on the web at:</p>
+        <p><a href="https://alastaircoote.github.io/hybrid-test-worker/dist/">https://alastaircoote.github.io/hybrid-test-worker/dist/</a></p>
+        <h6>Web and iOS</h6>
+        <p>
+          By dispatching a fetch event into the worker, we can construct custom
+          HTML responses offline:
+        </p>
+        <a class="button" href="offline-page.html">Offline page</a>
+        <aside>
+            <a href="https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/fetch-offline-response.js">Source code</a>
+          </aside>
+      </li>
+
+      <li>
+        <h3>Threaded notification</h3>
+        <h6>Web and iOS</h6>
+        <p>
+          We can use a combination of notification tags and action buttons to
+          "thread" a notification - giving the user the opportunity to tap to
+          read more, or dismiss whenever they're done.
+        </p>
+        <button id="send-notify">Show threaded notification</button>
+        <aside>
+          <a href="https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/threaded-notification.js">Source code</a>
+        </aside>
+      </li>
+      <li>
+        <h3>Canvas in notification</h3>
+        <h6>iOS only (HTML demo works on web)</h6>
+        <p>
+          In iOS we can map the HTML Canvas API directly to CoreGraphics,
+          allowing us to draw and animate graphics. To see a basic example
+          animation paired with an action button to add more elements:
+        </p>
+        <button id="send-canvas">Show canvas notification</button>
+        <aside>
+            <a href="https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/canvas-notification.js">Source code</a> |
+            <a href="https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/canvas-shared.js">Shared source code</a>
+          </aside>
+        <p>
+          To demonstrate code portability, the exact same code is used on a
+          normal web page here:
+        </p>
+        <a class="button" href="canvas.html">Render canvas in HTML</a>
+        <aside>
+            <a href="https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/canvas-client.js">Source code</a> |
+            <a href="https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/canvas-shared.js">Shared source code</a>
+          </aside>
+      </li>
+      <li>
+        <h3>Live video</h3>
+        <h6>iOS only</h6>
+        <p>
+          It is possible to put an HLS live video feed inside an iOS
+          notification. We can also switch between feeds via an action button.
+          This doesn't require any special API, just use of the same 'tag' field
+          the threaded notifications demo uses.
+        </p>
+        <p>
+          It isn't demonstrated here, but we can also put a canvas overlay (see
+          above) on top of a video, for mute/unmute display, text overlay, etc.
+        </p>
+        <button id="live-video">Show live video notification</button>
+        <aside>
+            <a href="https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/live-video-notification.js">Source code</a>
+          </aside>
+      </li>
+      <li>
+        <h3>Text replies</h3>
+        <h6>iOS only (proposed web standard)</h6>
+        <p>
+          It possible to use a special action button to giving users the chance
+          to send a text response directly from a notification, much like how
+          text message apps work. This implementation is based on a
+          <a href="https://github.com/anitawoodruff/inline-notification-replies"
+            >proposed API</a
+          >
+          for the web that has not yet been implemented in any browsers.
+        </p>
+        <button id="text-reply">Show text reply notification</button>
+        <aside>
+            <a href="https://github.com/alastaircoote/hybrid-test-worker/blob/master/src/text-reply-notification.js">Source code</a>
+          </aside>
+        <p>Normally you would use fetch() to send these responses off somewhere, but for the sake
+          of a simple demo, we are storing them in local storage. View them here:</p>
+        </p>
+        <a class="button" href="replies.html">See the replies I've sent</a>
+      </li>
+    </ul>
+
+    <script>
+      navigator.serviceWorker.register("./worker.js", { scope: "./" });
+
+      function sendToWorker(data) {
+        return navigator.serviceWorker.ready.then(function(reg) {
+          reg.active.postMessage(JSON.stringify(data), []);
+        });
+      }
+
+      function requestNotificationPermissionsAndSend(data) {
+        return Notification.requestPermission().then(function(newPermission) {
+          if (newPermission !== "granted") {
+            alert("You didn't grant permission");
+            throw new Error("no permission");
+          }
+          return sendToWorker(data);
+        });
+      }
+
+      document
+        .getElementById("send-notify")
+        .addEventListener("click", function() {
+          requestNotificationPermissionsAndSend({
+            action: "threaded-notification"
+          });
+        });
+
+      document
+        .getElementById("send-canvas")
+        .addEventListener("click", function() {
+          requestNotificationPermissionsAndSend({
+            action: "canvas-notification"
+          });
+        });
+
+      document
+        .getElementById("live-video")
+        .addEventListener("click", function() {
+          requestNotificationPermissionsAndSend({
+            action: "live-video-notification"
+          });
+        });
+
+      document
+        .getElementById("text-reply")
+        .addEventListener("click", function() {
+          requestNotificationPermissionsAndSend({
+            action: "text-reply-notification"
+          });
+        });
+    </script>
+  </body>
+</html>

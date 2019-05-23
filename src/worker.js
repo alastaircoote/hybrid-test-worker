@@ -8,7 +8,7 @@ import {
 } from "./text-reply-notification";
 
 self.addEventListener("activate", function(e) {
-  e.waitUntil(self.clients.claim());
+  self.clients.claim();
 });
 
 self.addEventListener("fetch", function(e) {
